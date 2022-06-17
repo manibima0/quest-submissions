@@ -81,3 +81,46 @@ pub contract mySmartContract {
 }
 
 ```
+
+
+```cadence
+import mySmartContract from 0x01
+
+transaction(_rowName: String, _rowID: String) {
+
+    prepare(signer: AuthAccount) {
+        let Point <- mySmartContract.createPoint(_rowName: _rowName, _rowID: _rowID)
+        signer.save(<- Point, to: /storage/MyPoint)
+
+        let loadedPoint <- signer.load<@ChainOfCustody.Point>(from: /storage/Point) ?? panic("Nothing found at this path")
+        log(loadedPoint.rowName)
+        destroy loadedPoint
+    }
+
+    execute {
+
+    }
+}
+
+```
+
+```cadence
+
+import mySmartContract from 0x01
+
+transaction(_rowName: String, _rowID: String) {
+
+    prepare(signer: AuthAccount) {
+        let row1 <- mySmartContract.createrow1(_rowName: _rowName, _rowID: _rowID)
+        signer.save(<- row1, to: /storage/Myrow1)
+
+        let loadedrow1 = signer.borrow<&ChainOfCustody.row1>(from: /storage/Myrow1) ?? panic("Nothing found at this path")
+        log(loadedrow1.rowName)
+    }
+
+    execute {
+
+    }
+}
+
+```
