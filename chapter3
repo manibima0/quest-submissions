@@ -303,3 +303,4 @@ access(all) contract SomeContract {
 |  Read  |  1234 |  1234 |  123  |   1   |            |             |              |
 |  Write |  1234 |   1   |   1   |   1   |            |             |              |
 | Access |       |       |       |       |    1234    |      1      |      123     |
+.
