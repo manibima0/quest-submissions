@@ -124,3 +124,204 @@ transaction(_rowName: String, _rowID: String) {
 }
 
 ```
+
+## DAY2
+
+111 What does .link() do?
+.link() creates a link for the purpose of allowing traffic where the /public/private facilities make it easily accessible
+
+222 In your own words (no code), explain how we can use resource interfaces to only expose certain things to the /public/ path.
+
+Having defined unstable functions along with the target, as well as it would be desirable to apply as well as a public access method to the resource interface, we began to use them together with the target of granting to the resource, accessing the resource in accordance with the /public/ direction.
+
+
+pub contract Store  {
+    pub resource interface Iproducts {
+        pub let item: String 
+    }
+    pub resource products: Iproducts {
+        pub let item: String
+        init() {
+        self.item = "hp omen 15"
+        } 
+    }
+    pub fun createproducts(): @products {
+        return <- create  products()
+    }
+}
+
+
+import Store from 0x01
+transaction() {
+  prepare(signer: AuthAccount) {
+    signer.save(<- Store.createproducts(), to:/storage/MyStore)
+  }
+  execute {}
+} 
+
+
+import Store from 0x01
+transaction() {
+  prepare(signer: AuthAccount) {
+    let myproducts <- signer.load<@Store.products>(from: /storage/MyStore)
+                    ?? panic("No products")
+    log(myproducts.item)
+    destroy myproducts;
+  }
+  execute {}
+} 
+
+
+
+import Store from 0x01
+transaction() {
+  prepare(signer: AuthAccount) {
+    let myproducts = signer.borrow<&Store.products>(from: /storage/MyStore)
+                    ?? panic("No products")
+    log(myproducts.item)
+  }
+  execute {}
+}
+
+
+
+## day3
+
+111  Why did we add a Collection to this contract? List the two main reasons
+
+changed the collection in this agreement, in conjunction with
+
+In the event that with the occurring series of NFTs, we need to have not any access to the storages, which I measure in terms of any NFT, which is very inefficient and also unnerving.
+Not a single person has singled out any NFT functions in any way, from which it follows that they only accumulated management records of NFT responsible persons in /storage/.
+
+
+222 What do you have to do if you have resources "nested" inside of another resource? ("Nested resources")
+
+If you have funds “embedded” in another source, it is advisable for you to proclaim the prohibition by order, which unconsciously destroys the “embedded” repertoires, the presence of help eliminate the primary phrase.
+
+
+333 Brainstorm some extra things we may want to add to this contract. Think about what might be problematic with this contract and how we could fix it
+
+
+In case we assume it is possible, our NFTs come from our Gathering, especially at this time we need to take it out of the Gathering in order to use it. This is good?
+
+Absent, I do not assume in any way, in order for anyone to have the opportunity to form NFTs. In some cases, minting may only be possible to a low degree of detection, such as in whitelist/whitelist scenarios. Thus, we need to add a source that mints NFTs. A planet, only slightly positioned, which refers to this source, the leadership of the NFT.
+
+The elimination of our NFTs with our Assembly, in order for something else to be realized by it, is bad, obviously, what I will probably implement, only a single "container" with the purpose of absolutely all of our NFTs, so that they can be met in mute for the purpose of ease of reception as well as functionality. In order to read NFTs without having to retrieve them with the collected ones, we need to add our .borrow() functions to our NFT contract, because the .borrow() role gives us the opportunity to look at the information in /storage/.
+
+
+## DAY4
+
+
+111 Because we had a LOT to talk about during this Chapter, I want you to do the following:
+Take our NFT contract so far and add comments to every single resource or function explaining what it's doing in your own words. Something like this:
+
+
+```cadence
+
+pub contract CryptoPoops {
+pub var totalSupply: UInt64
+
+// This NFT source includes an area as well as a personal number as well as a number of empty metadata.
+
+pub resource NFT {
+    pub let id: UInt64
+
+    pub let name: String
+    pub let favouriteFood: String
+    pub let luckyNumber: Int
+
+    init(_name: String, _favouriteFood: String, _luckyNumber: Int) {
+    self.id = self.uuid
+
+    self.name = _name
+    self.favouriteFood = _favouriteFood
+    self.luckyNumber = _luckyNumber
+    }
+}
+
+// This resource socket sets the available methods for our NFT collection target.
+
+pub resource interface CollectionPublic {
+    pub fun deposit(token: @NFT)
+    pub fun getIDs(): [UInt64]
+    pub fun borrowNFT(id: UInt64): &NFT
+}
+
+// This is our selection of NFTs, it is she who will carry out the socket of the available meeting and also saves our NFTs, allowing you to enter, remove and also borrow NFTs.
+
+pub resource Collection: CollectionPublic {
+    pub var ownedNFTs: @{UInt64: NFT}
+
+    // This role is used to add NFTs to the collection.
+
+    pub fun deposit(token: @NFT) {
+    self.ownedNFTs[token.id] <-! token
+    }
+
+    //This role is used for the purpose of concluding an NFT with a meeting.
+
+    pub fun withdraw(withdrawID: UInt64): @NFT {
+    let nft <- self.ownedNFTs.remove(key: withdrawID) 
+            ?? panic("This NFT does not exist in this Collection.")
+    return <- nft
+    }
+
+    //Gives all, without exception, personal NFT numbers that belong to NFT.
+
+    pub fun getIDs(): [UInt64] {
+    return self.ownedNFTs.keys
+    }
+
+    //It is used to borrow NFT and also read its metadata in the absence of pulling out from the meeting.
+
+    pub fun borrowNFT(id: UInt64): &NFT {
+    return &self.ownedNFTs[id] as &NFT
+    }
+
+    // excited by the presence of the formation of the assembly and also forms a useless lexicon that belong to the NFT.
+
+    init() {
+    self.ownedNFTs <- {}
+    }
+    
+    // obviously destroys the invested lexicon of resources by the presence of the liquidation of the meeting.
+
+    destroy() {
+    destroy self.ownedNFTs
+    }
+}
+
+//Forms an empty collection and also gives it to the transaction that generates it.
+
+pub fun createEmptyCollection(): @Collection {
+    return <- create Collection()
+}
+
+// this is the source of the Minter, which is considered to be a single section along with the code for the purpose of forming NFTs or additional minters.
+
+pub resource Minter {
+    // Forms an NFT and also gives it to the transaction that activates the function.
+
+    pub fun createNFT(name: String, favouriteFood: String, luckyNumber: Int): @NFT {
+    return <- create NFT(_name: name, _favouriteFood: favouriteFood, _luckyNumber: luckyNumber)
+    }
+
+    // generates another source of Minter, giving someone else to mint NFT.
+
+    pub fun createMinter(): @Minter {
+    return <- create Minter()
+    }
+
+}
+
+// the presence of the contract deployment is invoked by assigning the unstable Supply the role 0 and also keeping the Minter source in the account base.
+
+init() {
+    self.totalSupply = 0
+    self.account.save(<- create Minter(), to: /storage/Minter)
+}
+}
+
+```
+
