@@ -48,7 +48,7 @@ pub contract Test {
 ```
 
 
-### Day2
+## Day2
 
 111
 
@@ -103,7 +103,7 @@ pub contract SmartContract {
 ```
 
 
-### Day3
+## Day3
 
 111 Define your own contract that stores a dictionary of resources. Add a function to get a reference to one of the resources in the dictionary.
 
@@ -151,7 +151,7 @@ pub fun main(key: UInt64): &toolsNFTs.toolsNFT {
 
 ```
 
-### Day4
+## Day4
 
 111 Explain, in your own words, the 2 things resource interfaces can be used for (we went over both in today's content)
 
@@ -182,13 +182,13 @@ pub resource interface CAR {
         }
     }
     
-    ```
+```
     
     
 222 How would we fix this code?
 
 
-``cadence
+```cadence
 
 pub contract Stuff {
 
@@ -221,8 +221,9 @@ pub contract Stuff {
 }
 
 ```
+## Day5
 
-
+```cadence
 
 access(all) contract SomeContract {
     pub var testStruct: SomeStruct
