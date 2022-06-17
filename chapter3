@@ -1,1 +1,108 @@
+## day1
 
+111 In words, list 3 reasons why structs are different from resources
+
+Able to act only in 1 resource variant
+messages are necessarily "moved" among locations, and also do not have
+Resources must be intentionally generated, as well as liquidated
+
+
+222 Describe a situation where a resource might be better to use than a struct
+
+I think it can be used in ntf, because it is ideal for these purposes.
+
+333 What is the keyword to make a new resource
+
+create
+
+444 Can a resource be created in a script or transaction (assuming there isn't a public function to create one)?
+
+The main word to form can be applied only within the boundaries of the contract.
+
+555 What is the type of the resource below?
+
+
+Jacob type resource
+
+666 Let's play the "I Spy" game from when we were kids. I Spy 4 things wrong with this code. Please fix them.\
+
+
+```cadence
+
+pub contract Test {
+
+    // Hint: There's nothing wrong here ;)
+    pub resource Jacob {
+        pub let rocks: Bool
+        init() {
+            self.rocks = true
+        }
+    }
+
+    pub fun createJacob(): @Jacob { 
+        let myJacob <- create Jacob() 
+        return <- myJacob 
+    }
+}
+
+```
+
+
+### Day2
+
+111
+
+```Cadence
+
+pub contract SmartContract {
+
+    pub var myArray: @[char]
+    pub var myDictionary: @{String: char}
+
+    pub resource char {
+        pub let message: String
+
+        init() {
+            self.message = "i'm message for array"
+        }
+    }
+
+
+    pub fun array(char: @char) {
+        self.myArray.append(<- char)
+    }
+
+    pub fun dicrionary(char: @char) {
+        let key = char.message
+
+        let oldchar <- self.myDictionary[key] <- char
+        destroy oldchar
+    }
+
+
+    pub fun removeFromMyArray(index: Int): @char {
+        return <- self.myArray.remove(at: index)
+
+    }
+
+    pub fun removeFromDictionary(key: String): @char {
+        let char <- self.myDictionary.remove(key: key) ?? panic("Could not find CHAR")
+        return <- char
+    }
+
+
+
+
+    init() {
+        self.myArray <- []
+        self.myDictionary <- {}
+    }
+
+}
+
+```
+
+
+### Day3
+
+111 Define your own contract that stores a dictionary of resources. Add a function to get a reference to one of the resources in the dictionary.
