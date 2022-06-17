@@ -1,1 +1,83 @@
+## day1
 
+
+111 Explain what lives inside of an account
+
+Accounting journals are included in each program code of the contract, an integral part of the general accounting record, but apart from the areas that contain equal areas as available, thus also suitable for the line.
+
+222 What is the difference between the /storage/, /public/, and /private/ paths?
+
+
+| storage/ |              This is main storage section of your accout where all your data is actually stored.              |
+|:--------:|:-------------------------------------------------------------------------------------------------------------:|
+|  public/ |                         This is a public storage section that is available to everyone                        |
+| private/ | This is a private storage section that is only available to the owner and specefic people the give access to. |
+
+
+333 What does .save() do? What does .load() do? What does .borrow() do?
+
+|  .save()  |                                       This saves a resource into account storage                                       |
+|:---------:|:----------------------------------------------------------------------------------------------------------------------:|
+|  .load()  |                      This loads a resrouce from account storage using the type and path specified.                     |
+| .borrow() | This create a reference to a resource that someone can borrow without removing the resource from your account storage. |
+
+
+444 Explain why we couldn't save something to our account storage inside of a script.
+
+Scripts make it possible for you to only slightly read something with an approach, thus, as well as supporting something with an approach, an approach to paying for blue fuel, for this reason, in order to achieve its completion of the turnover.
+
+
+555 Explain why I couldn't save something to your account. Only the account owner can access their account storage utilziing their AuthAccount.
+Define a contract that returns a resource that has at least 1 field in it. Then, write 2 transactions:
+
+```cadence
+
+pub contract mySmartContract {
+
+    pub resource Point {
+        pub let rowName: String
+        pub let rowID: String
+        pub var mySmartContract: @[Point]
+
+        init(_rowName: String, _rowID: String) {
+            self.rowName = _rowName
+            self.rowID = _rowID
+            self.mySmartContract <- []
+        }
+
+        destroy() {
+            destroy self.mySmartContract
+        }
+
+        pub fun addCustodyExchange(Point: @Point) {
+            self.mySmartContract.append(<- Point)
+        }
+
+        pub fun removePoint(index: Int): @Point {
+            return <- self.mySmartContract.remove(at: index)
+        }
+    }
+
+    pub resource Point {
+        pub let exchangeID: String
+        pub let lawsName: String
+        pub let dateOfExchange: String
+
+        init(_exchangeID: String, _lawsName: String, _dateOfExchange: String) {
+            self.exchangeID = _exchangeID
+            self.lawsName = _lawsName
+            self.dateOfExchange = _dateOfExchange
+        }
+    }
+
+    init() {
+        
+    }
+
+    pub fun createPoint(_rowName: String, _rowID: String): @Point {
+        return <- create Point(_rowName: _rowName, _rowID: _rowID)
+    }
+
+}
+
+```
