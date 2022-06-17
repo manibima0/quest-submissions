@@ -106,3 +106,199 @@ pub contract SmartContract {
 ### Day3
 
 111 Define your own contract that stores a dictionary of resources. Add a function to get a reference to one of the resources in the dictionary.
+
+```cadence
+
+pub contract NFTs {
+
+    pub var NFTset: @{UInt64: toolsNFT}
+
+    pub fun dogReference(key: UInt64): &toolsNFT {
+        return &self.NFTset[key] as &toolsNFT
+    }
+
+    pub fun addNFT(id: UInt64, toolsName: String, gender: String, color: String) {
+        let toolsNFTdetail <- create toolsNFT(_id: id, _toolsName: toolsName, _color: color)
+        self.NFTset[toolsNFTdetail.id] <-! toolsNFTdetail
+    }
+
+    pub resource toolsNFT {
+        pub var id: UInt64
+        pub var toolsName: String
+        pub var color: String
+
+        init(_id: UInt64, _toolsName: String, _color: String, _age: UInt64) {
+            self.id = _id
+            self.toolsName = _toolsName
+            self.color = _color
+        }
+    }
+
+    init(){
+        self.NFTset <- {}
+    }
+}
+```
+
+
+```cadence
+import NFTs from 0x01
+
+pub fun main(key: UInt64): &toolsNFTs.toolsNFT {
+  
+  return toolsNFTs.toolsReference(key: key)
+}
+
+```
+
+### Day4
+
+111 Explain, in your own words, the 2 things resource interfaces can be used for (we went over both in today's content)
+
+
+Limitation of access to data regarding the stay or functions. If the source contains a method interconnected with it, the brewer must be able to notice it, but the graphic artist may not need to
+The formation of various sets of laws for the purpose of various additions, together with the use of the 1st and also this resource. The source is able to be used by a merchant or a buyer, and also anyone with them is able to have different abilities or data, but both have every chance to use the only one, and also this material source.
+
+222 Define your own contract. Make your own resource interface and a resource that implements the interface. Create 2 functions. In the 1st function, show an example of not restricting the type of the resource and accessing its content. In the 2nd function, show an example of restricting the type of the resource and NOT being able to access its content.
+
+```cadence
+pub resource interface CAR {
+        pub var name: String
+        pub var retailPrice : UFix64
+    }
+
+    pub resource carelem : CAR {
+        pub var retailPrice : UFix64
+        pub var name: String
+        pub var style: String
+
+
+        init(_CARName: String, _style: String, _abv : UFix64, _ibu : UFix64){
+            self.name = _carName
+            self.style = _style
+
+            self.retailPrice = 200000.0
+
+        }
+    }
+    
+    ```
+    
+    
+222 How would we fix this code?
+
+
+``cadence
+
+pub contract Stuff {
+
+    pub struct interface ITest {
+      pub var greeting: String
+      pub var favouriteFruit: String
+      pub fun changeGreeting(newGreeting: String): String //i add this
+    }
+
+    pub struct Test: ITest {
+      pub var greeting: String
+      pub var favouriteFruit: String //and this added
+
+      pub fun changeGreeting(newGreeting: String): String {
+        self.greeting = newGreeting
+        return self.greeting // returns the new greeting
+      }
+
+      init() {
+        self.greeting = "Hello!"
+        self.favouriteFruit = "Apple" //and 3
+      }
+    }
+
+    pub fun fixThis() {
+      let test: Test{ITest} = Test()
+      let newGreeting = test.changeGreeting(newGreeting: "Bonjour!")
+      log(newGreeting)
+    }
+}
+
+```
+
+
+
+access(all) contract SomeContract {
+    pub var testStruct: SomeStruct
+
+    pub struct SomeStruct {
+
+        //
+        // 4 Variables
+        //
+
+        pub(set) var a: String
+
+        pub var b: String
+
+        access(contract) var c: String
+
+        access(self) var d: String
+
+        //
+        // 3 Functions
+        //
+
+        pub fun publicFunc() {}
+
+        access(contract) fun contractFunc() {}
+
+        access(self) fun privateFunc() {}
+
+
+        pub fun structFunc() {
+            /**************/
+            /*** AREA 1 ***/
+            /**************/
+        }
+
+        init() {
+            self.a = "a"
+            self.b = "b"
+            self.c = "c"
+            self.d = "d"
+        }
+    }
+
+    pub resource SomeResource {
+        pub var e: Int
+
+        pub fun resourceFunc() {
+            /**************/
+            /*** AREA 2 ***/
+            /**************/
+        }
+
+        init() {
+            self.e = 17
+        }
+    }
+
+    pub fun createSomeResource(): @SomeResource {
+        return <- create SomeResource()
+    }
+
+    pub fun questsAreFun() {
+        /**************/
+        /*** AREA 3 ****/
+        /**************/
+    }
+
+    init() {
+        self.testStruct = SomeStruct()
+    }
+}
+
+```
+
+|        | Var a | Var b | Var c | Var d | publicFunc | privateFunc | contractFunc |
+|:------:|:-----:|:-----:|:-----:|:-----:|:----------:|:-----------:|:------------:|
+|  Read  |  1234 |  1234 |  123  |   1   |            |             |              |
+|  Write |  1234 |   1   |   1   |   1   |            |             |              |
+| Access |       |       |       |       |    1234    |      1      |      123     |
