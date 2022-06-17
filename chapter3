@@ -159,7 +159,7 @@ pub fun main(key: UInt64): &toolsNFTs.toolsNFT {
 Limitation of access to data regarding the stay or functions. If the source contains a method interconnected with it, the brewer must be able to notice it, but the graphic artist may not need to
 The formation of various sets of laws for the purpose of various additions, together with the use of the 1st and also this resource. The source is able to be used by a merchant or a buyer, and also anyone with them is able to have different abilities or data, but both have every chance to use the only one, and also this material source.
 
-222 Define your own contract. Make your own resource interface and a resource that implements the interface. Create 2 functions. In the 1st function, show an example of not restricting the type of the resource and accessing its content. In the 2nd function, show an example of restricting the type of the resource and NOT being able to access its content.
+222 Define your own contract. Make your own resource interface and a resource that implements the interface. Create 2 functions. In the 1st function, show an example of not restricting the type of the resource and accessing its content. In the 2nd function, show an example of restricting the type of the resource and NOT being able to access its content./
 
 ```cadence
 pub resource interface CAR {
