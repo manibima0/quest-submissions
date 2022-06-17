@@ -1,1 +1,217 @@
+## day1
 
+111 deploy the contract
+
+```cadence
+
+pub contract JacobTucker {
+    pub let is: String
+
+    init() {
+        self.is = "The best"
+    }
+}
+
+```
+
+
+111 heck that your variable is actually equals "the best" by executing a script to read that variable. Include a screenshot of the output.
+
+
+import JacobTucker from 0x01
+
+pub fun main(): String {
+  return JacobTucker.is
+  }
+  
+ 
+ 
+ ## day2
+ 
+Explain why we wouldn't call changeGreeting in a script.
+
+  Only  reads the data, but does not change it in any way. For the purpose of depositing funds
+
+What does the AuthAccount mean in the prepare phase of the transaction?
+
+  acquiring access to the user's log information in the preparatory stage
+
+What is the difference between the prepare phase and the execute phase in the transaction?
+
+  in preparation if you have access to the information/data in your assessment book. not in progress with us
+
+Add two new things inside your contract: A variable named myNumber that has type Int (set it to 0 when the contract is deployed) A function named updateMyNumber that takes in a new number named newNumber as a parameter that has type Int and updates myNumber to be newNumber
+
+
+```cadence
+pub contract HelloWorld {
+
+    pub var greeting: String
+    pub var mypoint : Int
+
+    init() {
+        self.greeting = "Hello, World!"
+        self.mypoint = 0
+    }
+
+    pub fun changeGreeting(newGreeting: String) {
+        self.greeting = newGreeting
+    }
+
+    pub fun updateMypoint(newpoint : Int) {
+        self.mypoint = newpoint
+    }
+}
+
+```
+
+
+
+Add a script that reads myNumber from the contract
+
+
+```cadence
+Add a script that reads mypoint from the contract
+
+import HelloWorld from 0x01
+
+pub fun main(): String {
+    log(HelloWorld.greeting)
+    log(HelloWorld.mypoint)
+
+    return HelloWorld.greeting
+}
+
+```
+
+
+Add a transaction that takes in a parameter named myNewNumber and passes it into the updateMyNumber function. Verify that your number changed by running the script again.
+
+```cadence
+import HelloWorld from 0x01
+
+transaction(myNewGreeting: String, myNewpoint: Int) {
+
+  prepare(signer: AuthAccount) {}
+
+  execute {
+    HelloWorld.changeGreeting(newGreeting: myNewGreeting)
+    HelloWorld.updateMypoint(newpoint: myNewpoint)
+  }
+}
+
+```
+
+
+### day3
+
+
+```cadence
+
+In a script, initialize an array (that has length == 3) of your favourite people, represented as Strings, and log it.
+
+pub fun main() {
+    var favPpl: [String] = ["Duke", "Sara", "Fable"]
+    log(favPpl)
+}
+
+```
+
+
+
+In a script, initialize a dictionary that maps the Strings Facebook, Instagram, Twitter, YouTube, Reddit, and LinkedIn to a UInt64 that represents the order in which you use them from most to least. For example, YouTube --> 1, Reddit --> 2, etc. If you've never used one before, map it to 0!
+
+```cadence
+pub fun main() {
+    var socialMedias: {String: UInt64} = {"Facebook": 1, "Instagram": 2, "Twitter": 1, "YouTube": 3, "Reddit": 1, "LinkedIn" : 1}
+    log(socialMedias)
+}
+
+```
+
+
+Explain what the force unwrap operator ! does, with an example different from the one I showed you (you can just change the type).
+
+Dictionaries give an optional role, in this case it means the absence of any role. Force deployment informs about an error code in case the role is also equal to zero instead of the predicted kind. In the case of public music thrown earlier, in case I try to read the role with the target, it returns zero, the probability that the lexicographic mark is not available at all, and also, for the purpose of the design error, a forced sweep manager is needed.
+
+Using this picture below, explain...
+
+What the error message means
+
+I strive to return the line, but in the very process we give away an optional line. Why do I get this error
+because of this, the fact that dictionaries give optional characteristics to the presence of access. This is coupled with the fact that the mark you are looking for can not work in any way. How to correct this
+Perfectly return the optional role "String?" and also let the method of tolerance cultivate all sorts of errors. In the options property, use Force Unwrap "thing[0x03]!" dispatcher in error return statement if null
+
+
+### DAY4
+
+
+Deploy a new contract that has a Struct of your choosing inside of it (must be different than Profile). Create a dictionary or array that contains the Struct you defined. Create a function to add to that array/dictionary.
+
+Create a dictionary or array that contains the Struct you defined
+
+Create a function to add to that array/dictionary.
+
+
+
+
+
+```cadence
+
+pub contract Login {
+
+    pub var profiles: {Address: Profile}
+    
+    pub struct Profile {
+        pub let rowNext: String
+        pub let account: Address
+
+        init(_rowNext: String, _account: Address) {
+            self.rowNext = _rowNext
+            self.account = _account
+        }
+    }
+
+    pub fun addProfile(rowNext: String, account: Address) {
+        let newProfile = Profile(_rowNext: rowNext, _account: account)
+        self.profiles[account] = newProfile
+    }
+
+    init() {
+        self.profiles = {}
+    }
+
+}
+
+```
+
+Add a transaction to call that function in step 3.
+
+```cadence
+
+import Login from 0x01
+
+transaction(rowNext: String, account: Address) {
+
+    prepare(signer: LoginAccount) {}
+
+    execute {
+        Login.addProfile(rowNext: rowNext, account: account)
+        log("Done.")
+    }
+}
+
+```
+
+
+Add a script to read the Struct you defined.
+
+```cadence
+
+import Login from 0x01
+
+pub fun main(account: Address): Login.Profile {
+    return Login.people[account]!
+}
+
+```
